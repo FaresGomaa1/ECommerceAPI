@@ -2,5 +2,6 @@
 {
     public class Color : BaseClass
     {
+        public ICollection<ColorSizeProduct> ColorSizeProducts { get; set; }
     }
 }
