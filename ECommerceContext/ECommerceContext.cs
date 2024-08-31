@@ -20,6 +20,7 @@ public class ECommerceContext : IdentityDbContext<User>
     public DbSet<ColorSizeProduct> ColorSizeProducts { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderDetail> OrderDetails { get; set; }
+    public DbSet<Photo> Photos { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Rate> Rates { get; set; }
     public DbSet<Size> Sizes { get; set; }
@@ -66,6 +67,9 @@ public class ECommerceContext : IdentityDbContext<User>
         builder.Entity<WishList>()
             .HasIndex(wl => new { wl.UserId, wl.ProductId })
             .IsUnique();
+        builder.Entity<Photo>()
+                .HasIndex(p => new { p.Url, p.ProductId })
+                .IsUnique();
 
         #endregion
 
@@ -78,7 +82,10 @@ public class ECommerceContext : IdentityDbContext<User>
             .Property(od => od.Price)
             .HasColumnType("decimal(18,2)");
         builder.Entity<Rate>()
-            .Property(r => r.rating)
+            .Property(r => r.Value)
+            .HasColumnType("decimal(18,2)");
+        builder.Entity<ColorSizeProduct>()
+            .Property(csp => csp.Price)
             .HasColumnType("decimal(18,2)");
 
         #endregion

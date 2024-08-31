@@ -5,7 +5,7 @@ namespace ECommerceAPI.Models
     public class ColorSizeProduct :IdBaseClass
     {
         public int Quantity { get; set; }
-
+        public decimal Price { get; set; }
         public int ColorId { get; set; }
         public Color Color { get; set; }
 

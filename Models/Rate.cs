@@ -4,7 +4,7 @@ namespace ECommerceAPI.Models
 {
     public class Rate : IdBaseClass
     {
-        public decimal rating { get; set; }
+        public int Value { get; set; }
         [ForeignKey("User")]
         public string UserId { get; set; }
         public User User { get; set; }
