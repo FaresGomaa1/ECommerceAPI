@@ -88,7 +88,6 @@ namespace ECommerceAPI.Repositories.Classes
             existingColorSizeProduct.ColorId = colorSizeProduct.ColorId;
             existingColorSizeProduct.SizeId = colorSizeProduct.SizeId;
             existingColorSizeProduct.Quantity = colorSizeProduct.Quantity;
-            existingColorSizeProduct.Price = colorSizeProduct.Price;
             try
             {
                 _context.ColorSizeProducts.Update(existingColorSizeProduct);

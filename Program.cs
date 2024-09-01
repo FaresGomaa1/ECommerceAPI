@@ -1,5 +1,13 @@
+using ECommerceAPI.Models;
+using ECommerceAPI.Repositories.Classes;
+using ECommerceAPI.Repositories.Interfaces;
+using ECommerceAPI.Services.Classes;
+using ECommerceAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ECommerceAPI
 {
@@ -12,14 +20,44 @@ namespace ECommerceAPI
             // Add services to the container.
             builder.Services.AddDbContext<ECommerceContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+            // configrue repositories
+            builder.Services.AddIdentity<User, IdentityRole>()
                     .AddEntityFrameworkStores<ECommerceContext>()
                     .AddDefaultTokenProviders();
-
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
+            builder.Services.AddScoped<IRateRepository, RateRepository>();
+            // configrue services
+            builder.Services.AddScoped<IProductService, ProductService>();
+            ///////////////////
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            ///////////////////////////////////
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "YourIssuer",
+                    ValidAudience = "YourAudience",
+                    // Ensure the key here matches the key used in GenerateJwtToken method
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourLongerSuperSecretKeyHere123456"))
+                };
+            });
+
+
+            builder.Services.AddAuthorization();
+
 
             var app = builder.Build();
 
@@ -30,6 +68,7 @@ namespace ECommerceAPI
                 app.UseSwaggerUI();
             }
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();

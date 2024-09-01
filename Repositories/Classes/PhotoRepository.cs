@@ -108,5 +108,9 @@ namespace ECommerceAPI.Repositories.Classes
         {
             return await _context.Photos.Where(p => p.ProductId == productId).ToListAsync();
         }
+        public async Task<Photo> GetFirstPhotoByProductIdAsync(int productId)
+        {
+            return await _context.Photos.Where(p => p.ProductId == productId).FirstAsync();
+        }
     }
 }

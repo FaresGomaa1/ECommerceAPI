@@ -12,5 +12,6 @@ namespace ECommerceAPI.Repositories.Interfaces
         Task AddPhotoAsync(Photo photo);
         Task DeletePhotoByIdAsync(int id);
         Task UpdatePhotoAsync(Photo photo, int id);
+        Task<Photo> GetFirstPhotoByProductIdAsync(int productId);
     }
 }

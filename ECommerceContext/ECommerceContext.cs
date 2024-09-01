@@ -84,7 +84,7 @@ public class ECommerceContext : IdentityDbContext<User>
         builder.Entity<Rate>()
             .Property(r => r.Value)
             .HasColumnType("decimal(18,2)");
-        builder.Entity<ColorSizeProduct>()
+        builder.Entity<Product>()
             .Property(csp => csp.Price)
             .HasColumnType("decimal(18,2)");
 
