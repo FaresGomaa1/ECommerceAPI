@@ -75,9 +75,6 @@ public class ECommerceContext : IdentityDbContext<User>
 
         #region Property Configurations
 
-        builder.Entity<Cart>()
-            .Property(c => c.Price)
-            .HasColumnType("decimal(18,2)");
         builder.Entity<OrderDetail>()
             .Property(od => od.Price)
             .HasColumnType("decimal(18,2)");

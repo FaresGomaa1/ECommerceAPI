@@ -61,7 +61,6 @@ namespace ECommerceAPI.Repositories.Classes
         {
             var existingCart = await GetCartByIdAsync(id);
 
-            existingCart.Price = cart.Price;
             existingCart.Quantity = cart.Quantity;
 
             _context.Carts.Update(existingCart);

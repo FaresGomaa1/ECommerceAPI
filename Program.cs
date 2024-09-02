@@ -32,8 +32,10 @@ namespace ECommerceAPI
             builder.Services.AddScoped<IColorSizeProductRepository, ColorSizeProductRepository>();
             builder.Services.AddScoped<IColorRepository, ColorRepository>();
             builder.Services.AddScoped<ISizeRepository, SizeRepository>();
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
             // configrue services
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<ICartService, CartService>();
             ///////////////////
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
