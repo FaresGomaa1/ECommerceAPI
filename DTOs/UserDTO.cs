@@ -28,7 +28,6 @@ namespace ECommerceAPI.DTOs
         public string Phone { get; set; }
         [UniqueEmail]
         public string Email { get; set; }
-        public AddAddressDTO Address { get; set; }
     }
     public class NameValidationAttribute : RegularExpressionAttribute
     {

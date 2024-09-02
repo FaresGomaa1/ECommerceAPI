@@ -17,7 +17,8 @@ namespace ECommerceAPI.Controllers
             _productService = productService;
         }
 
-        [HttpGet]
+        
+        [HttpGet("all")]
         public async Task<ActionResult<List<GetAllProductDTO>>> GetAllProducts()
         {
             try
@@ -27,9 +28,27 @@ namespace ECommerceAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while processing your request.");
+                return StatusCode(500, ex.Message);
             }
         }
 
+        
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<GetProductDTO>> GetProductById(int id)
+        {
+            try
+            {
+                var product = await _productService.GetProductById(id);
+                if (product == null)
+                {
+                    return NotFound();
+                }
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
