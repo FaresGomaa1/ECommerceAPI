@@ -28,24 +28,26 @@ namespace ECommerceAPI.Repositories.Classes
         {
             return await _context.Carts.FindAsync(id) ?? throw new KeyNotFoundException($"Cart with Id {id} not found.");
         }
+        public async Task<Cart> GetCartByUserProductColorSizeAsync(string userId, int productId, int colorId, int sizeId)
+        {
+            return await _context.Carts
+                .FirstOrDefaultAsync(c => c.UserId == userId
+                                       && c.ProductId == productId
+                                       && c.ColorId == colorId
+                                       && c.SizeId == sizeId);
+        }
+
 
         public async Task AddCartAsync(Cart cart)
         {
-            try
-            {
                 await _context.Carts.AddAsync(cart);
                 await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occurred while adding the cart.", ex);
-            }
         }
 
         public async Task DeleteCartByIdAsync(int id)
         {
             var cart = await GetCartByIdAsync(id);
-            if (cart != null) 
+            if (cart != null)
             {
                 _context.Carts.Remove(cart);
                 await _context.SaveChangesAsync();
@@ -54,17 +56,38 @@ namespace ECommerceAPI.Repositories.Classes
             {
                 throw new KeyNotFoundException($"Cart with Id {id} not found.");
             }
+        }
+        public async Task DeleteAllUserItemsAsync(string userId)
+        {
+            var userCarts = _context.Carts.Where(cart => cart.UserId == userId);
 
+            if (userCarts.Any())
+            {
+                _context.Carts.RemoveRange(userCarts);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new KeyNotFoundException($"No cart items found for user with Id {userId}.");
+            }
         }
 
-        public async Task UpdateCartAsync(Cart cart, int id)
+        public async Task<bool> UpdateCartAsync(int quantity, int id)
         {
             var existingCart = await GetCartByIdAsync(id);
 
-            existingCart.Quantity = cart.Quantity;
+            if (existingCart == null)
+            {
+                return false;
+            }
+
+            existingCart.Quantity = quantity;
 
             _context.Carts.Update(existingCart);
             await _context.SaveChangesAsync();
+
+            return true;
         }
+
     }
 }

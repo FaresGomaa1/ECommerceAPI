@@ -72,6 +72,12 @@ namespace ECommerceAPI
             });
 
             builder.Services.AddAuthorization();
+            ////////////////////
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CustomerOnly", policy =>
+                    policy.RequireRole("Customer"));
+            });
 
 
             var app = builder.Build();

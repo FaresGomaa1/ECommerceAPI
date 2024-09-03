@@ -62,7 +62,7 @@ public class ECommerceContext : IdentityDbContext<User>
             .HasIndex(csp => new { csp.ProductId, csp.SizeId, csp.ColorId })
             .IsUnique();
         builder.Entity<Cart>()
-            .HasIndex(c => new { c.UserId, c.ProductId })
+            .HasIndex(c => new { c.UserId, c.ProductId, c.SizeId, c.ColorId })
             .IsUnique();
         builder.Entity<WishList>()
             .HasIndex(wl => new { wl.UserId, wl.ProductId })
