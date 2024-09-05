@@ -75,5 +75,11 @@ namespace ECommerceAPI.Repositories.Classes
                 throw new Exception("An unexpected error occurred while deleting the wishlist.", ex);
             }
         }
+        public async Task<WishList> GetWishListItemByUserIdAndProductId(string userId, int productId)
+        {
+            return await _context.WishLists
+                .FirstOrDefaultAsync(w => w.UserId == userId && w.ProductId == productId);
+        }
+
     }
 }

@@ -33,9 +33,13 @@ namespace ECommerceAPI
             builder.Services.AddScoped<IColorRepository, ColorRepository>();
             builder.Services.AddScoped<ISizeRepository, SizeRepository>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
+            builder.Services.AddScoped<IWishListRepository, WishListRepository>();
+            builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             // configrue services
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<IWishListService, WishListService>();
             ///////////////////
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -77,6 +81,11 @@ namespace ECommerceAPI
             {
                 options.AddPolicy("CustomerOnly", policy =>
                     policy.RequireRole("Customer"));
+            });
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy =>
+                    policy.RequireRole("Admin"));
             });
 
 

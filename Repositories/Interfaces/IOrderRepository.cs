@@ -6,7 +6,6 @@ namespace ECommerceAPI.Repositories.Interfaces
 {
     public interface IOrderRepository
     {
-        Task<ICollection<Order>> GetAllOrdersAsync();
         Task<ICollection<Order>> GetAllOrdersByUserIdAsync(string userId);
         Task<Order> GetOrderByIdAsync(int id);
         Task AddOrderAsync(Order order);

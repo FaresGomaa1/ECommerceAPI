@@ -8,7 +8,7 @@ namespace ECommerceAPI.Repositories.Interfaces
     {
         Task<ICollection<Address>> GetAllAddressAsync(string userId);
         Task AddAddressAsync(Address address);
-        Task DeleteAddressByIdAsync(int id);
+        Task DeleteAddressByIdAsync(int id, string userId);
         Task UpdateAddressAsync(Address address, int id);
     }
 }

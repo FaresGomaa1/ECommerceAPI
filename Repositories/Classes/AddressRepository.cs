@@ -39,10 +39,10 @@ namespace ECommerceAPI.Repositories.Classes
             }
         }
 
-        public async Task DeleteAddressByIdAsync(int id)
+        public async Task DeleteAddressByIdAsync(int id, string userId)
         {
             var address = await _context.Addresses.FindAsync(id);
-            if (address == null)
+            if (address == null || address.UserId != userId)
             {
                 throw new KeyNotFoundException($"Address with Id {id} not found.");
             }

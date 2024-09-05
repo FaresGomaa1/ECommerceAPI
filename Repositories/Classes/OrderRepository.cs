@@ -16,11 +16,6 @@ namespace ECommerceAPI.Repositories.Classes
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<ICollection<Order>> GetAllOrdersAsync()
-        {
-            return await _context.Orders.ToListAsync();
-        }
-
         public async Task<Order> GetOrderByIdAsync(int id)
         {
             var order = await _context.Orders.FindAsync(id)
