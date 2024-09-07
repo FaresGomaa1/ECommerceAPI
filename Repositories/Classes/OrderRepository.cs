@@ -82,6 +82,7 @@ namespace ECommerceAPI.Repositories.Classes
             existingOrder.ClosingDate = order.ClosingDate;
             existingOrder.Comments = order.Comments;
             existingOrder.AddressId = order.AddressId;
+            existingOrder.Status = order.Status;
 
             try
             {

@@ -11,7 +11,6 @@ namespace ECommerceAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     [Authorize(Policy = "CustomerOnly")]
     public class OrderController : ControllerBase
     {

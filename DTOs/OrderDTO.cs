@@ -12,7 +12,6 @@ namespace ECommerceAPI.DTOs
         public DateTime OpeningDate { get; set; } = DateTime.Now;
 
         public string Comments { get; set; }
-
         [Required]
         public int AddressId { get; set; }
     }
@@ -20,17 +19,22 @@ namespace ECommerceAPI.DTOs
     {
         public int Id { get; set; }
         public DateTime ClosingDate { get; set; }
+        public string Status { get; set; }
     }
 
     public class AddOrderDTO : OrderBaseDTO
     {
+        [Required]
         public string userId { get; set; }
+        public string Status { get; set; } = "Pending";
     }
 
     public class UpdateOrderDTO
     {
         public DateTime ClosingDate { get; set; }
         public string Comments { get; set; }
+        [RegularExpression(@"^(Pending|Rejected|Approved)$", ErrorMessage = "Status must be either 'Pending', 'Rejected', or 'Approved'.")]
+        public string Status { get; set; }
         [Required]
         public int AddressId { get; set; }
     }

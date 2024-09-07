@@ -11,5 +11,6 @@ namespace ECommerceAPI.Repositories.Interfaces
         Task AddProductColorSizeAsync(ColorSizeProduct colorSizeProduct);
         Task DeleteProductColorSizeAsync(int id);
         Task UpdateProductColorSizeAsync(ColorSizeProduct colorSizeProduct, int id);
+        Task<ColorSizeProduct> Get(int productId, int colorId, int sizeId);
     }
 }

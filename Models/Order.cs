@@ -11,6 +11,8 @@ public class Order : IdBaseClass
     public DateTime ClosingDate { get; set; }
     [StringLength(500, ErrorMessage = "Comments cannot exceed 500 characters.")]
     public string Comments { get; set; }
+    [StringLength(20, ErrorMessage = "Status cannot exceed 20 characters.")]
+    public string Status { get; set; }
     public string UserId { get; set; }
     public User User { get; set; }
     public int AddressId { get; set; }

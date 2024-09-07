@@ -115,6 +115,40 @@ namespace ECommerceAPI.Repositories.Classes
 
             return colorSizeProduct;
         }
+        public async Task<ColorSizeProduct> Get(int productId, int colorId, int sizeId)
+        {
+            if (productId <= 0 || colorId <= 0 || sizeId <= 0)
+            {
+                throw new ArgumentException("Invalid product, color, or size ID provided.");
+            }
+
+            try
+            {
+                // Use FirstOrDefaultAsync for asynchronous query execution
+                var colorSizeProduct = await _context.ColorSizeProducts
+                    .Where(csp => csp.ProductId == productId
+                                && csp.ColorId == colorId
+                                && csp.SizeId == sizeId)
+                    .FirstOrDefaultAsync();
+
+                // Check if the entity exists
+                if (colorSizeProduct == null)
+                {
+                    throw new KeyNotFoundException("Product with the specified color and size was not found.");
+                }
+
+                return colorSizeProduct;
+            }
+            catch (KeyNotFoundException knfEx)
+            {
+                throw knfEx;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving product sizes and colors.", ex);
+            }
+        }
+
 
     }
 }
