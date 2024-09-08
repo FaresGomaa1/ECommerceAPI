@@ -109,6 +109,19 @@ namespace ECommerceAPI.Repositories.Classes
             return await _context.Rates
                 .AnyAsync(r => r.UserId == userId && r.ProductId == productId);
         }
+        public async Task<Rate> GetRateByProductIdUserIdAsync(int productId, string userId)
+        {
+            var rate = await _context.Rates
+                .Where(r => r.ProductId == productId && r.UserId == userId)
+                .FirstOrDefaultAsync();
+
+            if (rate == null)
+            {
+                throw new InvalidOperationException("Rate not found");
+            }
+
+            return rate;
+        }
 
     }
 }

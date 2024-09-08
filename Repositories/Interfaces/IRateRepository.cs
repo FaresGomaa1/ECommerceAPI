@@ -13,5 +13,6 @@ namespace ECommerceAPI.Repositories.Interfaces
         Task UpdateRateAsync(Rate rate, int id);
         Task<ICollection<Rate>> GetRateByProductIdAsync(int productId);
         Task<bool> IsRateExistAsync(int productId, string userId);
+        Task<Rate> GetRateByProductIdUserIdAsync(int productId, string userId);
     }
 }
