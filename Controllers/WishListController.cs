@@ -81,17 +81,67 @@ namespace ECommerceAPI.Controllers
         {
             if (newItem == null || string.IsNullOrWhiteSpace(newItem.UserId) || newItem.ProductId <= 0)
             {
-                return BadRequest(new {message = "Invalid input. Ensure both User ID and Product ID are provided." });
+                return BadRequest(new { message = "Invalid input. Ensure both User ID and Product ID are provided." });
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
             try
             {
+                // Call the service to add the item to the wishlist
                 await _wishListService.AddItemToWishList(newItem);
+
+                // Return a response indicating the item was successfully added
                 return CreatedAtAction(nameof(GetUserWishList), new { userId = newItem.UserId }, newItem);
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(ex.Message);
+                // Handle duplicate entry case (item already exists in the wishlist)
+                return Conflict(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Handle other unexpected errors
+                return StatusCode(500, new { message = "An unexpected error occurred.", details = ex.Message });
+            }
+        }
+
+
+        [HttpGet("check-exists")]
+        public async Task<IActionResult> CheckItemExistInCustomerWishList(int productId, string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("User ID cannot be null or empty.");
+            }
+
+            bool itemExists = await _wishListService.CheckItemExistInCustomerWishList(productId, userId);
+
+            return Ok(itemExists);
+        }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteWishListItemByUserIdProductId([FromQuery] int productId, [FromQuery] string userId)
+        {
+            if (productId <= 0)
+            {
+                return BadRequest(new { message = "Invalid product ID." });
+            }
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return BadRequest(new { message = "User ID is required." });
+            }
+
+            try
+            {
+                await _wishListService.DeleteByUserIdProductIdAsync(productId, userId);
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(new { message = ex.Message });
             }
             catch (Exception ex)
             {

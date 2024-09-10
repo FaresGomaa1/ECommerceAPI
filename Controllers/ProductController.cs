@@ -45,9 +45,13 @@ namespace ECommerceAPI.Controllers
                 }
                 return Ok(product);
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, new {message = ex.Message });
             }
         }
     }

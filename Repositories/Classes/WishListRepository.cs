@@ -38,19 +38,19 @@ namespace ECommerceAPI.Repositories.Classes
                 throw new ArgumentNullException(nameof(wishList), "WishList cannot be null.");
             }
 
-            try
+            // Check if the combination of UserId and ProductId already exists
+            var existingWishListItem = await _context.WishLists
+                .FirstOrDefaultAsync(w => w.UserId == wishList.UserId && w.ProductId == wishList.ProductId);
+
+            if (existingWishListItem != null)
             {
-                await _context.WishLists.AddAsync(wishList);
-                await _context.SaveChangesAsync();
+                // Throw InvalidOperationException if the item already exists
+                throw new InvalidOperationException("This product is already in the user's wishlist.");
             }
-            catch (DbUpdateException dbEx)
-            {
-                throw new Exception("An error occurred while adding the wishlist to the database.", dbEx);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An unexpected error occurred while adding the wishlist.", ex);
-            }
+
+            // If the combination does not exist, add the new wishlist item
+            _context.WishLists.Add(wishList);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteWishListByIdAsync(int id)
@@ -75,11 +75,23 @@ namespace ECommerceAPI.Repositories.Classes
                 throw new Exception("An unexpected error occurred while deleting the wishlist.", ex);
             }
         }
-        public async Task<WishList> GetWishListItemByUserIdAndProductId(string userId, int productId)
+        public async Task<WishList> GetWishListItemByUserIdAndProductIdAsync(string userId, int productId)
         {
-            return await _context.WishLists
-                .FirstOrDefaultAsync(w => w.UserId == userId && w.ProductId == productId);
-        }
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentException("User ID cannot be null or empty", nameof(userId));
+            }
 
+            var wishListItem = await _context.WishLists
+                .SingleOrDefaultAsync(w => w.UserId == userId && w.ProductId == productId);
+
+            if (wishListItem == null)
+            {
+                // Optionally, you could throw an exception or handle this case differently
+                throw new KeyNotFoundException($"No wishlist item found for UserId: {userId} and ProductId: {productId}");
+            }
+
+            return wishListItem;
+        }
     }
 }

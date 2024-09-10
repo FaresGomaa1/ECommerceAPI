@@ -27,13 +27,6 @@ namespace ECommerceAPI.Services.Classes
         // Add item to wishlist with proper error handling
         public async Task AddItemToWishList(AddItemToWishList item)
         {
-            // Check if the item already exists in the wishlist
-            var existingItem = await _wishListRepository.GetWishListItemByUserIdAndProductId(item.UserId, item.ProductId);
-            if (existingItem != null)
-            {
-                throw new InvalidOperationException("Item already exists in the wishlist.");
-            }
-
             // Add new item to wishlist
             var newItem = new WishList
             {
@@ -43,7 +36,6 @@ namespace ECommerceAPI.Services.Classes
 
             await _wishListRepository.AddWishListAsync(newItem);
         }
-
         // Delete a wishlist item with validation
         public async Task DeleteWishListItem(int itemId, string userId)
         {
@@ -83,5 +75,37 @@ namespace ECommerceAPI.Services.Classes
 
             return result.ToList();
         }
+        public async Task<bool> CheckItemExistInCustomerWishList(int productId, string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentException("User ID cannot be null or empty", nameof(userId));
+            }
+
+            var wishListItem = await _wishListRepository.GetWishListItemByUserIdAndProductIdAsync(userId, productId);
+            return wishListItem != null;
+        }
+        public async Task DeleteByUserIdProductIdAsync(int productId, string userId)
+        {
+            // Validate inputs
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
+            }
+
+            // Fetch the wishlist item
+            var item = await _wishListRepository.GetWishListItemByUserIdAndProductIdAsync(userId, productId);
+
+            // Check if the item exists
+            if (item == null)
+            {
+                throw new InvalidOperationException($"No wishlist item found for product ID {productId} and user ID {userId}.");
+            }
+
+            // Delete the wishlist item
+            await _wishListRepository.DeleteWishListByIdAsync(item.Id);
+        }
+
+
     }
 }

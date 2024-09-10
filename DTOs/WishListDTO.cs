@@ -1,4 +1,6 @@
-﻿namespace ECommerceAPI.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ECommerceAPI.DTOs
 {
     public class WishListDTO
     {
@@ -11,7 +13,9 @@
     }
     public class AddItemToWishList 
     {
+        [Required]
         public string UserId { get; set; }
+        [Required]
         public int ProductId { get; set; }
     }
 }

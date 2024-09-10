@@ -53,7 +53,7 @@ namespace ECommerceAPI.Controllers
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(new { errors = ModelState });
+                return BadRequest(new { message = ModelState });
             }
 
             try

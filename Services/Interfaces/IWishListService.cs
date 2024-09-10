@@ -7,5 +7,7 @@ namespace ECommerceAPI.Services.Interfaces
         Task<ICollection<WishListDTO>> GetUserWishList(string userId);
         Task DeleteWishListItem(int itemId, string userId);
         Task AddItemToWishList(AddItemToWishList item);
+        Task<bool> CheckItemExistInCustomerWishList(int productId, string userId);
+        Task DeleteByUserIdProductIdAsync(int productId, string userId);
     }
 }

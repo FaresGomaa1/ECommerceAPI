@@ -2,6 +2,7 @@
 using ECommerceAPI.Models;
 using ECommerceAPI.Repositories.Interfaces;
 using ECommerceAPI.Services.Interfaces;
+using System.Drawing;
 
 namespace ECommerceAPI.Services.Classes
 {
@@ -85,7 +86,9 @@ namespace ECommerceAPI.Services.Classes
                 {
                     ColorName = colorName.Name,
                     SizeName = sizeName.Name,
-                    Quantity = colorSize.Quantity
+                    Quantity = colorSize.Quantity,
+                    ColorId = colorSize.ColorId,
+                    SizeId = colorSize.SizeId,
                 });
             }
 
