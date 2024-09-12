@@ -50,16 +50,16 @@ namespace ECommerceAPI.Services.Classes
 
         public async Task<ICollection<GetCartDTO>> GetAllCartItems(string userId)
         {
-            // Fetch all cart items for the user
             var cartItems = await _cartRepository.GetAllCartsAsync(userId);
+            var result = new List<GetCartDTO>();
 
-            // Use LINQ to map Cart entities to GetCartDTOs
-            var result = await Task.WhenAll(cartItems.Select(async item =>
+            foreach (var item in cartItems)
             {
                 var product = await _productRepository.GetProductByIdAsync(item.ProductId);
-                Color color = await _colorRepository.GetColorByIdAsync(item.ColorId);
-                Size size = await _sizeRepository.GetSizeByIdAsync(item.SizeId);
-                return new GetCartDTO
+                var color = await _colorRepository.GetColorByIdAsync(item.ColorId);
+                var size = await _sizeRepository.GetSizeByIdAsync(item.SizeId);
+
+                result.Add(new GetCartDTO
                 {
                     Id = item.Id,
                     ProductId = item.ProductId,
@@ -70,11 +70,12 @@ namespace ECommerceAPI.Services.Classes
                     ColorId = item.ColorId,
                     Size = size.Name,
                     SizeId = item.SizeId,
-                };
-            }));
+                });
+            }
 
-            return result.ToList();
+            return result;
         }
+
 
         public async Task<bool> UpdateQuantityAsync(int quantity, int itemId)
         {
