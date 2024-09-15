@@ -7,11 +7,10 @@ namespace ECommerceAPI.DTOs
         [Required]
         [UniqueInvoiceNumber]
         public string InvoiceNumber { get; set; }
-
         [Required]
         public DateTime OpeningDate { get; set; } = DateTime.Now;
 
-        public string Comments { get; set; }
+        public string Comments { get; set; } = "";
         [Required]
         public int AddressId { get; set; }
     }
