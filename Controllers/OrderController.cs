@@ -3,6 +3,7 @@ using ECommerceAPI.Models;
 using ECommerceAPI.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -96,13 +97,18 @@ namespace ECommerceAPI.Controllers
                 OpeningDate = addOrderDTO.OpeningDate,
                 Comments = addOrderDTO.Comments,
                 AddressId = addOrderDTO.AddressId,
-                UserId = addOrderDTO.userId
+                UserId = addOrderDTO.userId,
+                Status= addOrderDTO.Status
             };
 
             try
             {
                 await _orderRepository.AddOrderAsync(order);
                 return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, order);
+            }
+            catch (DbUpdateException ex) when (ex.InnerException.Message.Contains("InvoiceNumber"))
+            {
+                return Conflict(new { message = "The Invoice Number must be unique." });
             }
             catch (Exception ex)
             {
