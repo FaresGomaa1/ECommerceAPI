@@ -71,7 +71,8 @@ namespace ECommerceAPI.Controllers
                     InvoiceNumber = o.InvoiceNumber,
                     OpeningDate = o.OpeningDate,
                     Comments = o.Comments,
-                    AddressId = o.AddressId
+                    AddressId = o.AddressId,
+                    Status = o.Status
                 }).ToList();
 
                 return Ok(orderDTOs);
