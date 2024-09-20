@@ -24,7 +24,7 @@ namespace ECommerceAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "CustomerOnly")]
         public async Task<ActionResult<OrderDetailsDTO>> GetOrderDetailsById(int id)
         {
             try
@@ -54,7 +54,7 @@ namespace ECommerceAPI.Controllers
         }
 
         [HttpGet("order/{orderId}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "CustomerOnly")]
         public async Task<ActionResult<ICollection<OrderDetailsDTO>>> GetAllOrderDetailsByOrderId(int orderId)
         {
             try

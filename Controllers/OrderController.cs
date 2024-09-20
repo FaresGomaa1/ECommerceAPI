@@ -23,7 +23,7 @@ namespace ECommerceAPI.Controllers
         }
         // GET: api/Order/{id}
         [HttpGet("{id}")]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "CustomerOnly")]
         public async Task<ActionResult<GetOrderDTO>> GetOrder(int id)
         {
             try
@@ -37,7 +37,8 @@ namespace ECommerceAPI.Controllers
                     OpeningDate = order.OpeningDate,
                     ClosingDate = order.ClosingDate,
                     Comments = order.Comments,
-                    AddressId = order.AddressId
+                    AddressId = order.AddressId,
+                    Status = order.Status
                 };
 
                 return Ok(orderDTO);

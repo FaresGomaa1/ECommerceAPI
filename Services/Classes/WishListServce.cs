@@ -48,21 +48,23 @@ namespace ECommerceAPI.Services.Classes
 
             await _wishListRepository.DeleteWishListByIdAsync(itemId);
         }
-
         // Get user's wishlist with related product and rate data
         public async Task<ICollection<WishListDTO>> GetUserWishList(string userId)
         {
             var wishLists = await _wishListRepository.GetAllWishListsAsync(userId);
 
-            var result = await Task.WhenAll(wishLists.Select(async item =>
+            var result = new List<WishListDTO>();
+
+            foreach (var item in wishLists)
             {
+                // Fetch product, category, and rates sequentially
                 var product = await _productRepository.GetProductByIdAsync(item.ProductId);
                 var category = await _categoryRepository.GetCategoryByIdAsync(product.CategoryId);
                 var rates = await _rateRepository.GetRateByProductIdAsync(item.ProductId);
 
                 var averageRating = rates.Any() ? rates.Average(r => r.Value) : 0;
 
-                return new WishListDTO
+                result.Add(new WishListDTO
                 {
                     Id = item.Id,
                     CategoryName = category.Name,
@@ -70,11 +72,12 @@ namespace ECommerceAPI.Services.Classes
                     ProductId = product.Id,
                     Price = product.Price,
                     Rate = (decimal)averageRating
-                };
-            }));
+                });
+            }
 
-            return result.ToList();
+            return result;
         }
+
         public async Task<bool> CheckItemExistInCustomerWishList(int productId, string userId)
         {
             if (string.IsNullOrEmpty(userId))
